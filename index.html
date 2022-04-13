@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p id="health"> your heath: 100/100 <br> enemy health: 100/100</p>
+<p id="soulcounter"> souls: 3</p>
+<button onClick = "eE()" id="attack"> attack </button>
+<br>
+<button onClick = "upgradeMaxhealth()" id="upgrademaxhealth"> upgrade max health (1 soul)</button>
+<button onClick = "restoreHealth()" id="restorehealth"> restore health (1 soul)</button>
+<button onClick = "upgradeSword()" id="upgradesword"> upgrade sword (1 soul)</button>
+<p id="thingy2"></p>
+<script>
+const swords = ["generic sword", "katana", "diamond sword", "plasma sword", "sword of gryffindor", "gods will"];
+const randomweapons = ["hand", "baseball bat", "frying pan", "lego brick", "your mother", "cheese"];
+var text = '';
+var attack = 0;
+var weapon = 0;
+var enemyweapon = 0;
+var thingymachine = 0;
+var playerhealth = 100;
+var playermaxhealth = 100;
+var enemyhealth = 100;
+var souls = 3;
+var enemymin = 2;
+var enemyrang = 2;
+var playermin = 5;
+var playerrang = 6;
+    function eE() {
+    if (playerhealth > 0) {
+    if (thingymachine == 0) {
+        attack = Math.floor(Math.random() * playerrang) + playermin;
+        enemyhealth -= attack;
+        if (enemyhealth > 0) {
+                text = "you dealt " + attack + " damage with your " + swords[weapon] + "<br>" + text;
+        document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/100";
+        } else {
+                text = "you killed enemy <br>" + text;
+        document.getElementById("health").innerHTML = "your health: " + playerhealth + "/100" + "<br> enemy health: dead";
+        }
+        document.getElementById("thingy2").innerHTML = text;
+        thingymachine = 1;
+        document.getElementById("attack").innerHTML = "you can attack in 2";
+        setTimeout(function(){
+        if (enemyhealth > 0) {
+            attack = Math.floor(Math.random() * enemyrang) + enemymin;
+            text = "enemy dealt " + attack + " damage with their " + randomweapons[enemyweapon] + "<br>" + text;
+            playerhealth -= attack;
+            document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/100";
+            } else { 
+            souls++;
+            enemyhealth = 100;
+            if (5 > enemyweapon) {
+            enemymin++;
+            enemyrang++;
+            enemyweapon++;
+            }
+            document.getElementById("soulcounter").innerHTML = "souls: " + souls;
+            document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/100";
+            }
+            document.getElementById("thingy2").innerHTML = text;
+            document.getElementById("attack").innerHTML = "you can attack in 1";
+},1000);
+setTimeout(function(){
+    document.getElementById("attack").innerHTML = "attack";
+    thingymachine = 0;
+},2000);
+        }
+        } else {
+         document.getElementById("attack").innerHTML = "youre literally dead";
+        }
+}
+function upgradeMaxhealth() {
+if (souls > 0 && playerhealth > 0) {
+souls -= 1;
+playermaxhealth += 20;
+ document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/100";
+ document.getElementById("soulcounter").innerHTML = "souls: " + souls;
+} else {
+document.getElementById("upgrademaxhealth").innerHTML = "not enough souls or you are dead";
+setTimeout(function(){
+document.getElementById("upgrademaxhealth").innerHTML = "upgrade max health (1 soul)";
+},1000);
+}
+}
+function restoreHealth() {
+if (souls > 0 && playerhealth > 0) {
+souls -= 1;
+playerhealth = playermaxhealth;
+ document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/100";
+ document.getElementById("soulcounter").innerHTML = "souls: " + souls;
+} else {
+document.getElementById("restorehealth").innerHTML = "not enough souls or you are dead";
+setTimeout(function(){
+document.getElementById("restorehealth").innerHTML = "restore health (1 soul)";
+},1000);
+}
+}
+function upgradeSword() {
+if (souls > 0 && playerhealth > 0 && 5 > weapon) {
+souls -= 1;
+playermin++;
+playerrang++;
+weapon++;
+ document.getElementById("soulcounter").innerHTML = "souls: " + souls;
+} else {
+document.getElementById("upgradesword").innerHTML = "not enough souls or you are dead or you have the best weapon";
+setTimeout(function(){
+document.getElementById("upgradesword").innerHTML = "upgrade sword (1 soul)";
+},1000);
+}
+}
+</script>
+</body>
+</html>
