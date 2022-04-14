@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html>
 <body>
 <p id="health"> your heath: 150/150 <br> enemy health: 100/100</p>
 <p id="soulcounter"> souls: 0</p>
-<button onClick = "eE()" id="attack"> attack </button><button onClick = "attackToggle()" id="autoattack"> autoattack: off </button>
+<button onClick = "eE()" id="attack"> attack </button>
 <br>
 <button onClick = "upgradeMaxhealth()" id="upgrademaxhealth"> upgrade max health (1 soul)</button>
 <button onClick = "restoreHealth()" id="restorehealth"> restore health (1 soul)</button>
@@ -11,12 +12,11 @@
 <p id="thingy2"></p>
 <script>
 const swords = ["alluminum sword", "generic sword", "katana", "diamond sword", "netherite sword", "plasma sword", "sword of gryffindor", "gods will"];
-const randomweapons = ["hand", "baseball bat", "frying pan", "lego brick", "your mother", "cheese", "moldy unsanitized rotten antigenic visibly dying blue cheese being snapped by thanos 2 seconds away from inedible only for $5.99 organically grown supernatural formerly old non gmo benefits the enconomy by %100 of antigens is good for health supported by the chinese ukranian indian canadian united stated united kingdom governments may cause suicidal thoughts death heart kidney and lung failure diarrhea stomach pains talk to your local beaver if you have issues eating this OHHH OHHH OHHH OZEMPIC", "your death certificate"];
+const randomweapons = ["hand", "baseball bat", "frying pan", "lego brick", "your mother", "cheese", "stop sign", "your death certificate"];
 var text = '';
 var attack = 0;
 var weapon = 0;
 var enemyweapon = 0;
-var thingymachine = 0;
 var playerhealth = 150;
 var playermaxhealth = 150;
 var enemyhealth = 100;
@@ -29,7 +29,8 @@ var playerrang = 6;
 var autoattack = false;
     function eE() {
     if (playerhealth > 0) {
-    if (thingymachine == 0) {
+        document.getElementById("attack").disabled = true;
+    autoattack = true;
         attack = Math.floor(Math.random() * playerrang) + playermin;
         enemyhealth -= attack;
         if (enemyhealth > 0) {
@@ -41,38 +42,40 @@ var autoattack = false;
         }
         document.getElementById("thingy2").innerHTML = text;
         thingymachine = 1;
-        document.getElementById("attack").innerHTML = "you can attack in 2";
+        document.getElementById("attack").innerHTML = "in battle";
         setTimeout(function(){
         if (enemyhealth > 0) {
             attack = Math.floor(Math.random() * enemyrang) + enemymin;
             text = "enemy dealt " + attack + " damage with their " + randomweapons[enemyweapon] + "<br>" + text;
             playerhealth -= attack;
             document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/" + enemymaxhealth;
-            } else { 
+            } 
+            document.getElementById("thingy2").innerHTML = text;
+},1000);
+setTimeout(function(){
+    if (enemyhealth <= 0) { 
             souls++;
-            enemyhealth = 100;
             if (7 > enemyweapon) {
             enemymin++;
             enemyrang++;
             enemyweapon++;
             enemymaxhealth += 10;
+            enemyhealth = enemymaxhealth;
             }
             document.getElementById("soulcounter").innerHTML = "souls: " + souls;
             document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/" + enemymaxhealth;
+            document.getElementById("attack").innerHTML = "attack";
+            autoattack = false;
+            document.getElementById("attack").disabled = false;
             }
-            document.getElementById("thingy2").innerHTML = text;
-            document.getElementById("attack").innerHTML = "you can attack in 1";
-},1000);
-setTimeout(function(){
-    document.getElementById("attack").innerHTML = "attack";
-    thingymachine = 0;
     if (autoattack == true) {
     eE();
     }
 },2000);
-        }
         } else {
+        text = "enemy killed you (imagine being bad)" + "<br>" + text;
          document.getElementById("attack").innerHTML = "youre literally dead";
+         document.getElementById("thingy2").innerHTML = text;
         }
 }
 function upgradeMaxhealth() {
@@ -104,8 +107,8 @@ document.getElementById("restorehealth").innerHTML = "restore health (1 soul)";
 function upgradeSword() {
 if (souls > 0 && playerhealth > 0 && 7 > weapon) {
 souls -= 1;
-playermin++;
-playerrang++;
+playermin += 2;
+playerrang += 2;
 weapon++;
  document.getElementById("soulcounter").innerHTML = "souls: " + souls;
 } else {
@@ -113,15 +116,6 @@ document.getElementById("upgradesword").innerHTML = "not enough souls or you are
 setTimeout(function(){
 document.getElementById("upgradesword").innerHTML = "upgrade sword (1 soul)";
 },1000);
-}
-}
-function attackToggle() {
-if (autoattack == false) {
-autoattack = true;
-document.getElementById("autoattack").innerHTML = "autoattack: on";
-} else {
-autoattack = false;
-document.getElementById("autoattack").innerHTML = "autoattack: off";
 }
 }
 </script>
