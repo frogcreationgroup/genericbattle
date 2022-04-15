@@ -1,15 +1,22 @@
 
 <!DOCTYPE html>
 <html>
+<head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<title>generic battle - where the battle is generic</title>
+</head>
 <body>
+        <div class="w3-container">
 <p id="health"> your heath: 150/150 <br> enemy health: 100/100</p>
 <p id="soulcounter"> souls: 0</p>
 <button onClick = "eE()" id="attack"> attack </button>
 <br>
-<button onClick = "upgradeMaxhealth()" id="upgrademaxhealth"> upgrade max health (1 soul)</button>
-<button onClick = "restoreHealth()" id="restorehealth"> restore health (1 soul)</button>
-<button onClick = "upgradeSword()" id="upgradesword"> upgrade sword (1 soul)</button>
+<button onClick = "upgradeMaxhealth()" id="upgrademaxhealth"> upgrade max health</button>
+<button onClick = "restoreHealth()" id="restorehealth"> restore health</button>
+<button onClick = "upgradeSword()" id="upgradesword"> upgrade sword</button>
+<button onClick = "upgradeAgility()" id="upgradeagility"> upgrade agility (chance of dodging attacks)</button>
 <p id="thingy2"></p>
+</div>
 <script>
 const swords = ["alluminum sword", "generic sword", "katana", "diamond sword", "netherite sword", "plasma sword", "sword of gryffindor", "gods will"];
 const randomweapons = ["hand", "baseball bat", "frying pan", "lego brick", "your mother", "cheese", "stop sign", "your death certificate"];
@@ -27,14 +34,24 @@ var enemyrang = 2;
 var playermin = 5;
 var playerrang = 6;
 var autoattack = false;
+var agility = 1;
+var enemyagility = 1;
+var misschance = 0;
     function eE() {
     if (playerhealth > 0) {
         document.getElementById("attack").disabled = true;
     autoattack = true;
         attack = Math.floor(Math.random() * playerrang) + playermin;
+        misschance = Math.floor(Math.random() * 101);
+        if (misschance > enemyagility * 2) {
         enemyhealth -= attack;
+        }
         if (enemyhealth > 0) {
+                if (misschance > enemyagility * 2) {
                 text = "you dealt " + attack + " damage with your " + swords[weapon] + "<br>" + text;
+                } else {
+                text = "you missed" + "<br>" + text;
+                }
         document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/" + enemymaxhealth;
         } else {
                 text = "you killed enemy <br>" + text;
@@ -46,8 +63,17 @@ var autoattack = false;
         setTimeout(function(){
         if (enemyhealth > 0) {
             attack = Math.floor(Math.random() * enemyrang) + enemymin;
-            text = "enemy dealt " + attack + " damage with their " + randomweapons[enemyweapon] + "<br>" + text;
-            playerhealth -= attack;
+            misschance = Math.floor(Math.random() * 101);
+            if (misschance > agility * 7) {
+                playerhealth -= attack;
+                if (playerhealth > 0) {
+                text = "enemy dealt " + attack + " damage with their " + randomweapons[enemyweapon] + "<br>" + text;
+                } else {
+                text = "enemy killed you (imagine being bad)" + "<br>" + text;
+                }
+            } else {
+                text = "enemy missed"+ "<br>" + text;
+            }
             document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/" + enemymaxhealth;
             } 
             document.getElementById("thingy2").innerHTML = text;
@@ -59,6 +85,7 @@ setTimeout(function(){
             enemymin++;
             enemyrang++;
             enemyweapon++;
+            enemyagility++;
             enemymaxhealth += 10;
             enemyhealth = enemymaxhealth;
             }
@@ -73,21 +100,20 @@ setTimeout(function(){
     }
 },2000);
         } else {
-        text = "enemy killed you (imagine being bad)" + "<br>" + text;
          document.getElementById("attack").innerHTML = "youre literally dead";
-         document.getElementById("thingy2").innerHTML = text;
         }
 }
 function upgradeMaxhealth() {
 if (souls > 0 && playerhealth > 0) {
 souls -= 1;
-playermaxhealth += 20;
+playermaxhealth += 30;
+playerhealth += 30;
  document.getElementById("health").innerHTML = "your health: " + playerhealth + "/" + playermaxhealth + "<br> enemy health: " + enemyhealth + "/" + enemymaxhealth;
  document.getElementById("soulcounter").innerHTML = "souls: " + souls;
 } else {
 document.getElementById("upgrademaxhealth").innerHTML = "not enough souls or you are dead";
 setTimeout(function(){
-document.getElementById("upgrademaxhealth").innerHTML = "upgrade max health (1 soul)";
+document.getElementById("upgrademaxhealth").innerHTML = "upgrade max health";
 },1000);
 }
 }
@@ -100,7 +126,7 @@ playerhealth = playermaxhealth;
 } else {
 document.getElementById("restorehealth").innerHTML = "not enough souls or you are dead";
 setTimeout(function(){
-document.getElementById("restorehealth").innerHTML = "restore health (1 soul)";
+document.getElementById("restorehealth").innerHTML = "restore health";
 },1000);
 }
 }
@@ -114,7 +140,19 @@ weapon++;
 } else {
 document.getElementById("upgradesword").innerHTML = "not enough souls or you are dead or you have the best weapon";
 setTimeout(function(){
-document.getElementById("upgradesword").innerHTML = "upgrade sword (1 soul)";
+document.getElementById("upgradesword").innerHTML = "upgrade sword";
+},1000);
+}
+}
+function upgradeAgility() {
+if (souls > 0 && playerhealth > 0 && 6 > agility) { 
+souls -= 1;
+agility++;
+document.getElementById("soulcounter").innerHTML = "souls: " + souls;
+} else {
+        document.getElementById("upgradeagility").innerHTML = "not enough souls or you are dead or you have the best agility";
+setTimeout(function(){
+document.getElementById("upgradeagility").innerHTML = "upgrade agility (chance of dodging attacks)";
 },1000);
 }
 }
